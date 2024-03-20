@@ -4,21 +4,25 @@ from string import Template
 url = "https://aves.ninjas.cl/api/birds"
 response = request_json(url)
 
-lista_img = [(elemento['images']['main'], elemento['name']['spanish']) for elemento in response]
+lista_img = [(elemento['images']['main'], elemento['name']['spanish'], elemento['name']['english']) for elemento in response]
+
 
 nuevo_card = """<div class="card mx-auto my-3" style="width: 18rem; background-color: #181818;">
                 <img src="$url" class="card-img-top" style="height: 200px; object-fit: contain; margin-top: 10px;" alt="...">
                 <div class="card-body d-flex flex-column justify-content-center">
-                    <h5 class="card-title text-white text-center">$title</h5>
+                    <h5 class="card-title text-white text-center"> $title_es</h5>
+                    <h5 class="card-title text-white text-center"> ($title_en)</h5>
+                    
                 </div>
             </div>
     """
+    
 
 img_template = Template(nuevo_card)
 texto_img = ''
-
-for image, name in lista_img:
-    texto_img += img_template.substitute(url=image, title=name) + '\n'
+    
+for image, name_es, name_en in lista_img:
+    texto_img += img_template.substitute(url=image, title_en=name_en, title_es=name_es) + '\n'    
 
 html_template = Template('''<!doctype html>
 <html lang="en">
